@@ -25,6 +25,49 @@ Use this routing table for automatic selection:
 
 If multiple skills apply, start with `project-intake-planning`, then hand off to one execution skill.
 
+## Git Branch and Upload Rules
+
+Use this repository workflow consistently:
+
+1. Keep `main` as the sync branch for upstream updates.
+2. Do feature work only on `feature/*` branches.
+3. Sync `main` first, then update the feature branch from `main`.
+4. Push feature branches to `origin` and open PRs from feature branch to `main`.
+
+### Main Sync Commands
+
+```bash
+git checkout main
+git fetch upstream
+git rebase upstream/main
+git push origin main
+```
+
+### Feature Development Commands
+
+```bash
+git checkout -b feature/<topic>
+# implement + commit
+git push -u origin feature/<topic>
+```
+
+### Keep Feature Branch Updated
+
+```bash
+git checkout feature/<topic>
+git fetch origin
+git rebase origin/main
+# or: git merge origin/main
+```
+
+### Daily Upload Safety Checks
+
+```bash
+git status -sb
+git branch --show-current
+git remote -v
+```
+
 ## Knowledge Base Policy
 
 After major work, update:
