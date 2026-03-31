@@ -6,6 +6,7 @@ This folder contains project documentation, plans, archives, and AI knowledge ba
 
 - `ADMIN_PAYMENT_INTEGRATION_API.md`: existing API documentation
 - `plans/`: active plans and implementation drafts
+  - includes `PR_WORKFLOW_TEMPLATE.md` for branch sync and PR steps
 - `archive/`: completed, superseded, or retired documents
 - `ai-kb/`: compact project memory for faster future sessions
 
