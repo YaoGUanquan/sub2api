@@ -16,6 +16,7 @@ This directory contains files for deploying Sub2API on Linux servers.
 | `docker-compose.yml` | Docker Compose configuration (named volumes) |
 | `docker-compose.local.yml` | Docker Compose configuration (local directories, easy migration) |
 | `docker-deploy.sh` | **One-click Docker deployment script (recommended)** |
+| `docker-upgrade-digest.sh` | One-click deterministic upgrade/rollback script for digest pinning |
 | `.env.example` | Docker environment variables template |
 | `DOCKER.md` | Docker Hub documentation |
 | `install.sh` | One-click binary installation script |
@@ -204,6 +205,35 @@ docker-compose up -d
 # Remove all data (caution!)
 docker-compose down -v
 ```
+
+### Deterministic App Upgrade/Rollback (Digest Pinning)
+
+Use `docker-upgrade-digest.sh` to standardize production upgrades and rollbacks.
+
+```bash
+cd /opt/sub2api-deploy
+chmod +x docker-upgrade-digest.sh
+
+# Upgrade (default: pull weishaw/sub2api:latest, pin digest, recreate sub2api)
+./docker-upgrade-digest.sh upgrade
+
+# Optional: upgrade with a specific tag (if tag exists on Docker Hub)
+IMAGE_REF=weishaw/sub2api:v0.1.999 ./docker-upgrade-digest.sh upgrade
+
+# Rollback to latest backup compose file
+./docker-upgrade-digest.sh rollback
+
+# Rollback to a specific backup file
+./docker-upgrade-digest.sh rollback /opt/sub2api-deploy/docker-compose.yml.bak-YYYY-MM-DD-HHMMSS
+```
+
+What this script does:
+
+- Creates a timestamped backup of `docker-compose.yml`
+- Pulls target image and resolves immutable digest from `RepoDigests`
+- Rewrites compose image to digest format (`weishaw/sub2api@sha256:...`)
+- Recreates `sub2api` and prints running image + health status
+- Provides rollback command using the generated backup file
 
 ### Environment Variables
 

@@ -42,6 +42,18 @@
   - `docker compose ps` shows `sub2api` healthy with recent `Created/Up` time.
 - Related commit or branch: `feature/project-bootstrap-docs-skills` (knowledge-base update only).
 
+## [2026-04-06] `manifest unknown` when pulling version tag from Docker Hub
+
+- Symptom: `docker pull weishaw/sub2api:v0.1.108` failed with `manifest unknown`.
+- Reproduction: In `/opt/sub2api-deploy`, run `docker pull weishaw/sub2api:v0.1.108` then inspect digest.
+- Root cause: Upstream Git release version and Docker Hub tag publication cadence were not aligned; specific version tag did not exist in Docker Hub.
+- Fix: Pull `weishaw/sub2api:latest`, resolve digest via `docker inspect ... RepoDigests`, then pin compose image to digest and redeploy.
+- Validation:
+  - Pull returned digest `sha256:9d6039a3339a...`.
+  - `docker compose -f docker-compose.yml up -d sub2api` recreated the container successfully.
+  - `docker compose ps` and `docker inspect sub2api` confirmed running `weishaw/sub2api@sha256:9d6039a3339a...`.
+- Related commit or branch: `feature/project-bootstrap-docs-skills` (deployment script + KB updates).
+
 ## Template
 
 ## [YYYY-MM-DD] Issue title

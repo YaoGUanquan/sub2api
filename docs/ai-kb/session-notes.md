@@ -42,6 +42,33 @@
   - `docker compose -f docker-compose.yml ps` shows `sub2api` healthy with recent uptime.
   - `postgres` and `redis` remained healthy and unchanged.
 
+## [2026-04-06] Standardize one-click production upgrade/rollback script
+
+- Request: Provide a one-click production upgrade/rollback workflow that can be reused for every deployment.
+- Actions taken: Added `deploy/docker-upgrade-digest.sh` with `upgrade` and `rollback` actions, then updated `deploy/README.md` with direct usage commands for digest-pinned deployments.
+- Runtime validation evidence (operator session): `weishaw/sub2api:latest` pulled to digest `sha256:9d6039a...`, compose image pinned to `weishaw/sub2api@sha256:9d6039a...`, container recreated and healthy.
+- Files touched: `deploy/docker-upgrade-digest.sh`, `deploy/README.md`, `docs/ai-kb/*`.
+- Tests run: Local script syntax check (`bash -n`) planned in repo; production runtime check completed by operator via `docker compose ps` and `docker inspect`.
+- Open items: Optionally publish a single remote install command that fetches this script from fork raw URL.
+
+### Operator command set (2026-04-06 validated)
+
+- Local sync script to server:
+  - `scp ./deploy/docker-upgrade-digest.sh ubuntu@43.153.150.195:/opt/sub2api-deploy/`
+- Server execute:
+  - `cd /opt/sub2api-deploy`
+  - `chmod +x docker-upgrade-digest.sh`
+  - `./docker-upgrade-digest.sh upgrade`
+  - `./docker-upgrade-digest.sh rollback` (if needed)
+- Validation:
+  - `docker compose -f docker-compose.yml ps`
+  - `docker inspect sub2api --format '{{.Config.Image}}'`
+
+### Archival reference
+
+- Archived runbook: `docs/archive/2026-04-06-production-docker-upgrade-runbook.md`
+- Archive rationale: Completed and validated ops runbook kept as stable reference.
+
 ## Template
 
 ## [YYYY-MM-DD] Session summary
