@@ -27,6 +27,24 @@
 - Affected paths: `/opt/sub2api-deploy/docker-compose.yml` (server runtime), `docs/ai-kb/*` (tracking).
 - Follow-up: Add a small runbook that covers digest update, health checks, and rollback command sequence.
 
+## [2026-04-06] Adopt scripted digest-based Docker upgrades for production
+
+- Context: Manual upgrade commands were repeated across sessions and release tag availability was not guaranteed (`v0.1.108` tag missing in Docker Hub image tags).
+- Decision: Add a dedicated deployment script (`deploy/docker-upgrade-digest.sh`) to run backup, pull, digest resolution, compose rewrite, service recreation, and rollback in a consistent flow.
+- Alternatives considered: Keep manual ad-hoc commands in chat only; rely on floating `latest` without digest pinning.
+- Tradeoffs: Adds one script to maintain, but significantly reduces operator error and improves rollback speed and auditability.
+- Affected paths: `deploy/docker-upgrade-digest.sh`, `deploy/README.md`, `docs/ai-kb/*`.
+- Follow-up: Optionally expose a raw-download install snippet for servers that do not keep a full repo clone.
+
+## [2026-04-06] Promote upgrade commands to AGENTS and archive runbook
+
+- Context: Upgrade script was validated on production server, but command memory remained scattered across chat and notes.
+- Decision: Record the validated command set in `AGENTS.md` and archive a dedicated runbook in `docs/archive/` for stable future reuse.
+- Alternatives considered: Keep only session-level notes in `docs/ai-kb/session-notes.md`.
+- Tradeoffs: Slight duplication between AGENTS and archive doc, but much faster operator onboarding and lower command drift risk.
+- Affected paths: `AGENTS.md`, `docs/archive/2026-04-06-production-docker-upgrade-runbook.md`, `docs/ai-kb/session-notes.md`.
+- Follow-up: Keep AGENTS and archive runbook aligned whenever script parameters or server path conventions change.
+
 ## Template
 
 ## [YYYY-MM-DD] Decision title

@@ -68,6 +68,47 @@ git branch --show-current
 git remote -v
 ```
 
+## Production Upgrade Quick Guide (Docker Compose)
+
+Use this verified flow for production runtime upgrades on server `43.153.150.195`.
+
+- Deploy path: `/opt/sub2api-deploy`
+- Compose file: `docker-compose.yml`
+- Upgrade script in repo: `deploy/docker-upgrade-digest.sh`
+- Archived runbook: `docs/archive/2026-04-06-production-docker-upgrade-runbook.md`
+
+### Sync Script to Server
+
+Run from local repository root:
+
+```bash
+scp ./deploy/docker-upgrade-digest.sh ubuntu@43.153.150.195:/opt/sub2api-deploy/
+```
+
+### Run Upgrade on Server
+
+```bash
+cd /opt/sub2api-deploy
+chmod +x docker-upgrade-digest.sh
+./docker-upgrade-digest.sh upgrade
+```
+
+### Validate After Upgrade
+
+```bash
+docker compose -f docker-compose.yml ps
+docker inspect sub2api --format '{{.Config.Image}}'
+docker compose -f docker-compose.yml logs --tail=80 sub2api
+```
+
+### Rollback (if needed)
+
+```bash
+cd /opt/sub2api-deploy
+./docker-upgrade-digest.sh rollback
+# or: ./docker-upgrade-digest.sh rollback /opt/sub2api-deploy/docker-compose.yml.bak-YYYY-MM-DD-HHMMSS
+```
+
 ## Knowledge Base Policy
 
 After major work, update:
