@@ -54,6 +54,21 @@
   - `docker compose ps` and `docker inspect sub2api` confirmed running `weishaw/sub2api@sha256:9d6039a3339a...`.
 - Related commit or branch: `feature/project-bootstrap-docs-skills` (deployment script + KB updates).
 
+## [2026-04-08] OpenAI proxy base URL blocked after enabling strict URL allowlist
+
+- Symptom: Account-management endpoint using OpenAI API key with proxy `https://fast.vpsairobot.com` stopped working after allowlist hardening.
+- Reproduction:
+  - Set `SECURITY_URL_ALLOWLIST_ENABLED=true`.
+  - Keep `SECURITY_URL_ALLOWLIST_UPSTREAM_HOSTS` without `fast.vpsairobot.com`.
+  - Use account `base_url=https://fast.vpsairobot.com` for upstream requests.
+- Root cause: When allowlist mode is enabled, upstream host validation is mandatory; hosts not present in `SECURITY_URL_ALLOWLIST_UPSTREAM_HOSTS` are rejected.
+- Fix: Switch to compatibility profile for current production (`SECURITY_URL_ALLOWLIST_ENABLED=false` and `SECURITY_URL_ALLOWLIST_ALLOW_INSECURE_HTTP=false`), then recreate `sub2api` container.
+- Validation:
+  - `docker compose -f docker-compose.yml config` shows `SECURITY_URL_ALLOWLIST_ENABLED: "false"`.
+  - `docker exec sub2api env` confirms `SECURITY_URL_ALLOWLIST_ENABLED=false`.
+  - Logs contain expected warning `security.url_allowlist.enabled=false` and healthy startup `Server started on 0.0.0.0:8080`.
+- Related commit or branch: `feature/project-bootstrap-docs-skills` (knowledge-base update only).
+
 ## Template
 
 ## [YYYY-MM-DD] Issue title

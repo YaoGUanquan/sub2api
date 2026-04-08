@@ -69,6 +69,18 @@
 - Archived runbook: `docs/archive/2026-04-06-production-docker-upgrade-runbook.md`
 - Archive rationale: Completed and validated ops runbook kept as stable reference.
 
+## [2026-04-08] URL allowlist mode rollback for OpenAI proxy compatibility
+
+- Request: Archive the full operation and record persistent AI memory after production URL allowlist tuning and verification.
+- Actions taken: Diagnosed that strict allowlist mode (`SECURITY_URL_ALLOWLIST_ENABLED=true`) blocked existing OpenAI proxy host usage (`https://fast.vpsairobot.com`) because host matching was enforced; switched runtime mode to compatibility profile (`enabled=false`, `allow_insecure_http=false`), recreated container, and archived command flow.
+- Validation evidence:
+  - `docker compose -f docker-compose.yml config` resolved `SECURITY_URL_ALLOWLIST_ENABLED: "false"`.
+  - `docker exec sub2api env` showed `SECURITY_URL_ALLOWLIST_ENABLED=false`.
+  - Logs showed expected warning `security.url_allowlist.enabled=false` and healthy startup `Server started on 0.0.0.0:8080`.
+- Files touched: `docs/archive/2026-04-08-url-allowlist-compatibility-runbook.md`, `docs/ai-kb/session-notes.md`, `docs/ai-kb/decision-log.md`, `docs/ai-kb/troubleshooting-log.md`, `docs/ai-kb/backlog.md`, `AGENTS.md`.
+- Tests run: Ops validation commands on production host (compose config/env/log checks).
+- Open items: Before any future toggle back to `SECURITY_URL_ALLOWLIST_ENABLED=true`, run a host inventory of account `base_url` entries and warn about compatibility impact first.
+
 ## Template
 
 ## [YYYY-MM-DD] Session summary

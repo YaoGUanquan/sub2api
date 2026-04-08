@@ -6,6 +6,7 @@
 
 - Keep `upstream/main` synced into local `main` on a regular cadence.
 - Add explicit app endpoint smoke checks after each container recreation (health API + login/session flow).
+- Reminder gate: Before toggling `SECURITY_URL_ALLOWLIST_ENABLED` from `false` to `true`, warn operator first, inventory all account `base_url` hosts, and verify host coverage in `SECURITY_URL_ALLOWLIST_UPSTREAM_HOSTS`.
 
 ## P1
 
