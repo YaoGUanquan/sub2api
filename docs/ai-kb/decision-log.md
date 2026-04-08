@@ -45,6 +45,15 @@
 - Affected paths: `AGENTS.md`, `docs/archive/2026-04-06-production-docker-upgrade-runbook.md`, `docs/ai-kb/session-notes.md`.
 - Follow-up: Keep AGENTS and archive runbook aligned whenever script parameters or server path conventions change.
 
+## [2026-04-08] Keep production URL allowlist in compatibility mode (`enabled=false`, HTTPS-only)
+
+- Context: Existing account-management OpenAI proxy endpoint `https://fast.vpsairobot.com` worked before strict allowlist enforcement; after setting `SECURITY_URL_ALLOWLIST_ENABLED=true`, requests failed because upstream host allowlist checks became mandatory.
+- Decision: Keep production runtime at `SECURITY_URL_ALLOWLIST_ENABLED=false` while preserving `SECURITY_URL_ALLOWLIST_ALLOW_INSECURE_HTTP=false` so URL format remains validated and only `https://` is accepted.
+- Alternatives considered: Keep `enabled=true` and continuously extend `SECURITY_URL_ALLOWLIST_UPSTREAM_HOSTS` with every proxy host/path pattern.
+- Tradeoffs: Better compatibility for heterogeneous proxy routing and less operational churn; reduced SSRF/domain restriction strength compared with strict allowlist mode.
+- Affected paths: `/opt/sub2api-deploy/.env` (server runtime), `docs/archive/2026-04-08-url-allowlist-compatibility-runbook.md`, `docs/ai-kb/*`, `AGENTS.md`.
+- Follow-up: If moving back to `enabled=true`, first inventory all account `base_url` hosts, pre-fill `SECURITY_URL_ALLOWLIST_UPSTREAM_HOSTS`, and announce compatibility risk before rollout.
+
 ## Template
 
 ## [YYYY-MM-DD] Decision title

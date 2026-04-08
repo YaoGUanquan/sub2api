@@ -109,6 +109,15 @@ cd /opt/sub2api-deploy
 # or: ./docker-upgrade-digest.sh rollback /opt/sub2api-deploy/docker-compose.yml.bak-YYYY-MM-DD-HHMMSS
 ```
 
+## URL Allowlist Operation Reminder
+
+Production currently uses compatibility mode for proxy flexibility:
+
+- `SECURITY_URL_ALLOWLIST_ENABLED=false`
+- `SECURITY_URL_ALLOWLIST_ALLOW_INSECURE_HTTP=false` (HTTPS-only)
+
+Before any future change to `SECURITY_URL_ALLOWLIST_ENABLED=true`, always remind the operator that account-management `base_url` hosts not listed in `SECURITY_URL_ALLOWLIST_UPSTREAM_HOSTS` will be blocked (for example proxy domains such as `fast.vpsairobot.com`). Require host inventory and allowlist coverage check before rollout.
+
 ## Knowledge Base Policy
 
 After major work, update:
