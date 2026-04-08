@@ -133,3 +133,11 @@ frontend/coverage/
 aicodex
 output/
 
+!docs/README.md
+!docs/ADMIN_PAYMENT_INTEGRATION_API.md
+!docs/plans/
+!docs/plans/**
+!docs/archive/
+!docs/archive/**
+!docs/ai-kb/
+!docs/ai-kb/**

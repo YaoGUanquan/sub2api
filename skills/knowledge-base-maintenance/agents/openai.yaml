@@ -1,0 +1,3 @@
+interface:
+  display_name: "Knowledge Base Maintenance"
+  short_description: "Capture decisions and maintain docs/ai-kb memory"
