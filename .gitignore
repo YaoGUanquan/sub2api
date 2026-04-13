@@ -78,7 +78,6 @@ Desktop.ini
 # ===================
 tmp/
 temp/
-logs/
 *.tmp
 *.temp
 *.log
@@ -128,16 +127,19 @@ deploy/docker-compose.override.yml
 .gocache/
 vite.config.js
 docs/*
+!docs/PAYMENT.md
+!docs/PAYMENT_CN.md
 .serena/
-
-# ===================
-# 压测工具
-# ===================
-tools/loadtest/
-# Antigravity Manager
-Antigravity-Manager/
-antigravity_projectid_fix.patch
 .codex/
 frontend/coverage/
 aicodex
 output/
+
+!docs/README.md
+!docs/ADMIN_PAYMENT_INTEGRATION_API.md
+!docs/plans/
+!docs/plans/**
+!docs/archive/
+!docs/archive/**
+!docs/ai-kb/
+!docs/ai-kb/**
